@@ -8,7 +8,6 @@ describe("Salesman", () => {
       email: "john_doe@email.com",
       bio: "A salesman",
       password: "john_doe_password",
-      createdAt: new Date(),
     });
 
     expect(salesman).toBeTruthy();
