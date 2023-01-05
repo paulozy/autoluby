@@ -1,3 +1,4 @@
+import { permissions } from "@utils/Permissions";
 import { Salesman } from "./Salesman";
 
 describe("Salesman", () => {
@@ -12,5 +13,6 @@ describe("Salesman", () => {
 
     expect(salesman).toBeTruthy();
     expect(salesman).toHaveProperty("id");
+    expect(salesman.props.permissions).toEqual(permissions.salesman);
   });
 });
