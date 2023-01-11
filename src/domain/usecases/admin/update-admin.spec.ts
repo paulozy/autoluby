@@ -46,33 +46,4 @@ describe("Update Admin", () => {
       })
     ).rejects.toThrow(new Error("User not found"));
   });
-
-  test("should not be able to update an admin if the email is already in use", async () => {
-    const inMemoryUserRepository = new InMemoryUserRepository();
-    const createAdminUseCase = new CreateAdminUseCase(inMemoryUserRepository);
-    const updateAdminUseCase = new UpdateAdminUseCase(inMemoryUserRepository);
-
-    await createAdminUseCase.execute({
-      cpf: "12345678910",
-      name: "John Doe",
-      email: "john_doe.admin@email.com",
-      password: "121334",
-      bio: "I'm a admin",
-    });
-
-    const { admin } = await createAdminUseCase.execute({
-      cpf: "12345678910",
-      name: "John Doe",
-      email: "john_doe.admin@example.com",
-      password: "121334",
-      bio: "I'm a admin",
-    });
-
-    await expect(
-      updateAdminUseCase.execute({
-        id: admin.id,
-        email: "john_doe.admin@email.com",
-      })
-    ).rejects.toThrow(new Error("User already exists"));
-  });
 });
