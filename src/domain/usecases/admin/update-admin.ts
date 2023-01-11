@@ -5,7 +5,6 @@ interface IUpdateAdminRequest {
   id: string;
   cpf?: string;
   name?: string;
-  email?: string;
   bio?: string;
 }
 
@@ -17,22 +16,12 @@ export class UpdateAdminUseCase {
   constructor(private readonly userRepository: IUserRepository) {}
 
   async execute(request: IUpdateAdminRequest): Promise<IUpdateAdminResponse> {
-    const fieldsAbleToUpdate = ["cpf", "name", "email", "bio"];
+    const fieldsAbleToUpdate = ["cpf", "name", "bio"];
 
     const admin = await this.userRepository.findById(request.id);
 
     if (!admin) {
       throw new Error("User not found");
-    }
-
-    if (request.email) {
-      const adminAlreadyExists = await this.userRepository.findByEmail(
-        request.email
-      );
-
-      if (adminAlreadyExists) {
-        throw new Error("User already exists");
-      }
     }
 
     fieldsAbleToUpdate.forEach((field) => {
