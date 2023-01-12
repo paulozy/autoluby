@@ -22,4 +22,13 @@ describe("Delete Salesman", () => {
 
     expect(userRepository.users).toHaveLength(0);
   });
+
+  test("should not be able delete a salesman with an invalid id", async () => {
+    const userRepository = new InMemoryUserRepository();
+    const deleteSalesmanUseCase = new DeleteSalesmanUseCase(userRepository);
+
+    expect(async () => {
+      await deleteSalesmanUseCase.execute({ id: "invalid-id" });
+    }).rejects.toThrowError("User not found");
+  });
 });
