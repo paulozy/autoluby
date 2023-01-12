@@ -6,7 +6,7 @@ describe("Create Admin", () => {
     const userRepository = new InMemoryUserRepository();
     const createAdminUseCase = new CreateAdminUseCase(userRepository);
 
-    const { admin } = await createAdminUseCase.execute({
+    const { user } = await createAdminUseCase.execute({
       cpf: "12345678910",
       name: "John Doe",
       email: "john_doe.admin@email.com",
@@ -14,9 +14,9 @@ describe("Create Admin", () => {
       bio: "I'm a admin",
     });
 
-    expect(admin).toBeTruthy();
+    expect(user).toBeTruthy();
     expect(userRepository.users).toHaveLength(1);
-    expect(userRepository.users[0]).toEqual(admin);
+    expect(userRepository.users[0]).toEqual(user);
   });
 
   test("Should not be able to create a new user admin with an email already in use", async () => {
@@ -42,5 +42,28 @@ describe("Create Admin", () => {
         bio: "I'm a admin",
       })
     ).rejects.toThrowError("User already exists");
+  });
+
+  test("Should not be able to create a new user admin with an cpf already in use", async () => {
+    const userRepository = new InMemoryUserRepository();
+    const createAdminUseCase = new CreateAdminUseCase(userRepository);
+
+    await createAdminUseCase.execute({
+      cpf: "12345678910",
+      name: "John Doe",
+      email: "john_doe.admin@email.com",
+      password: "123456",
+      bio: "I'm a admin",
+    });
+
+    expect(async () => {
+      await createAdminUseCase.execute({
+        cpf: "12345678910",
+        name: "John Doe",
+        email: "john_doe.admin@mail.com",
+        password: "123456",
+        bio: "I'm a admin",
+      });
+    }).rejects.toThrowError("User already exists");
   });
 });

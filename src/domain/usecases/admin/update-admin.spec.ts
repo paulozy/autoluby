@@ -8,7 +8,7 @@ describe("Update Admin", () => {
     const createAdminUseCase = new CreateAdminUseCase(inMemoryUserRepository);
     const updateAdminUseCase = new UpdateAdminUseCase(inMemoryUserRepository);
 
-    const { admin } = await createAdminUseCase.execute({
+    const { user } = await createAdminUseCase.execute({
       cpf: "12345678910",
       name: "John Doe",
       email: "john_doe.admin@email.com",
@@ -17,20 +17,20 @@ describe("Update Admin", () => {
     });
 
     const { admin: updatedAdmin } = await updateAdminUseCase.execute({
-      id: admin.id,
+      id: user.id,
       bio: "I'm the master admin",
     });
 
     expect(updatedAdmin).toBeTruthy();
     expect(updatedAdmin).toEqual(
       expect.objectContaining({
-        id: admin.id,
-        cpf: admin.cpf,
-        name: admin.name,
-        email: admin.email,
-        password: admin.password,
+        id: user.id,
+        cpf: user.cpf,
+        name: user.name,
+        email: user.email,
+        password: user.password,
         bio: "I'm the master admin",
-        permissions: admin.permissions,
+        permissions: user.permissions,
       })
     );
   });

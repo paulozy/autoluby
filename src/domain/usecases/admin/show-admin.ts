@@ -1,18 +1,10 @@
-import { Admin } from "@src/domain/entities/Admin";
+import { IShowUserRequest, IShowUserResponse } from "@src/domain/interfaces";
 import { IUserRepository } from "@src/domain/repositories/user-repository";
-
-interface IShowAdminRequest {
-  id: string;
-}
-
-interface IShowAdminResponse {
-  admin: Admin;
-}
 
 export class ShowAdminUseCase {
   constructor(private readonly userRepository: IUserRepository) {}
 
-  async execute(request: IShowAdminRequest): Promise<IShowAdminResponse> {
+  async execute(request: IShowUserRequest): Promise<IShowUserResponse> {
     const admin = await this.userRepository.findById(request.id);
 
     if (!admin) {

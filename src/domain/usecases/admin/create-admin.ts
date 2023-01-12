@@ -1,27 +1,20 @@
 import { Admin } from "@src/domain/entities/Admin";
+import {
+  ICreateUserRequest,
+  ICreateUserResponse,
+} from "@src/domain/interfaces";
 import { IUserRepository } from "@src/domain/repositories/user-repository";
-
-interface ICreateAdminRequest {
-  cpf: string;
-  name: string;
-  email: string;
-  password: string;
-  bio: string;
-}
-
-interface ICreateAdminResponse {
-  admin: Admin;
-}
 
 export class CreateAdminUseCase {
   constructor(private readonly userRepository: IUserRepository) {}
 
-  async execute(request: ICreateAdminRequest): Promise<ICreateAdminResponse> {
+  async execute(request: ICreateUserRequest): Promise<ICreateUserResponse> {
     const { cpf, name, email, password, bio } = request;
 
-    const userAlreadyExists = await this.userRepository.findByEmail(email);
+    const emailAlreadyUse = await this.userRepository.findByEmail(email);
+    const userAlreadyExists = await this.userRepository.findByCpf(cpf);
 
-    if (userAlreadyExists) {
+    if (emailAlreadyUse || userAlreadyExists) {
       throw new Error("User already exists");
     }
 
@@ -35,6 +28,6 @@ export class CreateAdminUseCase {
 
     await this.userRepository.save(admin);
 
-    return { admin };
+    return { user: admin };
   }
 }

@@ -8,7 +8,7 @@ describe("Delete Admin", () => {
     const createAdminUseCase = new CreateAdminUseCase(inMemoryUserRepository);
     const deleteAdminUseCase = new DeleteAdminUseCase(inMemoryUserRepository);
 
-    const { admin } = await createAdminUseCase.execute({
+    const { user } = await createAdminUseCase.execute({
       cpf: "12345678910",
       name: "John Doe",
       email: "john_doe.admin@email.com",
@@ -18,7 +18,7 @@ describe("Delete Admin", () => {
 
     expect(inMemoryUserRepository.users).toHaveLength(1);
 
-    await deleteAdminUseCase.execute({ id: admin.id });
+    await deleteAdminUseCase.execute({ id: user.id });
 
     expect(inMemoryUserRepository.users).toHaveLength(0);
   });

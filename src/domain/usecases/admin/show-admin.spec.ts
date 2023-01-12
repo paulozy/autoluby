@@ -8,7 +8,7 @@ describe("Show Admin", () => {
     const createAdminUseCase = new CreateAdminUseCase(inMemoryUserRepository);
     const showAdminsUseCase = new ShowAdminUseCase(inMemoryUserRepository);
 
-    const { admin } = await createAdminUseCase.execute({
+    const { user } = await createAdminUseCase.execute({
       cpf: "12345678910",
       name: "John Doe",
       email: "john_doe.admin@email.com",
@@ -17,10 +17,10 @@ describe("Show Admin", () => {
     });
 
     const { admin: showedAdmin } = await showAdminsUseCase.execute({
-      id: admin.id,
+      id: user.id,
     });
 
-    expect(showedAdmin).toEqual(admin);
+    expect(showedAdmin).toEqual(user);
   });
 
   test("should be able to return an error if admin not found", async () => {

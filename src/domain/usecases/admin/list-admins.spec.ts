@@ -24,9 +24,9 @@ describe("List Admins", () => {
       password: "121334",
     });
 
-    const { admins } = await listAdminsUseCase.execute({});
+    const { users } = await listAdminsUseCase.execute({});
 
-    expect(admins).toHaveLength(2);
+    expect(users).toHaveLength(2);
   });
 
   test("should be able to list all admin users ordered by created date asc", async () => {
@@ -50,11 +50,11 @@ describe("List Admins", () => {
       password: "121334",
     });
 
-    const { admins } = await listAdminsUseCase.execute({
+    const { users } = await listAdminsUseCase.execute({
       orderBy: "CREATED_ASC",
     });
 
-    expect(admins[0].props.name).toBe("John Doe");
+    expect(users[0].props.name).toBe("John Doe");
   });
 
   test("should be able to list all admin users paginated", async () => {
@@ -78,12 +78,12 @@ describe("List Admins", () => {
       password: "121334",
     });
 
-    const { admins } = await listAdminsUseCase.execute({
+    const { users } = await listAdminsUseCase.execute({
       itemPerPage: 1,
     });
 
-    expect(admins).toHaveLength(1);
-    expect(admins[0].props.name).toBe("John Doe");
+    expect(users).toHaveLength(1);
+    expect(users[0].props.name).toBe("John Doe");
   });
 
   test("should be able to list all admin users paginated with key", async () => {
@@ -107,19 +107,19 @@ describe("List Admins", () => {
       password: "121334",
     });
 
-    const { admin: nathan } = await createAdminUseCase.execute({
-      cpf: "12345678911",
+    const { user: nathan } = await createAdminUseCase.execute({
+      cpf: "12345678912",
       name: "Nathan Doe",
       email: "nathan_doe.admin@email.com",
       bio: "I'm a nathan admin",
       password: "121334",
     });
 
-    const { admins } = await listAdminsUseCase.execute({
+    const { users } = await listAdminsUseCase.execute({
       itemPerPage: 2,
       itemPageKey: nathan.id,
     });
 
-    expect(admins).toHaveLength(1);
+    expect(users).toHaveLength(1);
   });
 });
