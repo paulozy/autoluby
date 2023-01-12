@@ -1,3 +1,4 @@
+import { Encrypter } from "@src/infra/encrypter/bcrypt";
 import { InMemoryUserRepository } from "@tests/repositories/in-memory-user-repository";
 import { CreateAdminUseCase } from "./create-admin";
 import { UpdateAdminUseCase } from "./update-admin";
@@ -5,7 +6,11 @@ import { UpdateAdminUseCase } from "./update-admin";
 describe("Update Admin", () => {
   test("should be able to update an admin on success", async () => {
     const inMemoryUserRepository = new InMemoryUserRepository();
-    const createAdminUseCase = new CreateAdminUseCase(inMemoryUserRepository);
+    const encrypter = new Encrypter();
+    const createAdminUseCase = new CreateAdminUseCase(
+      inMemoryUserRepository,
+      encrypter
+    );
     const updateAdminUseCase = new UpdateAdminUseCase(inMemoryUserRepository);
 
     const { user } = await createAdminUseCase.execute({

@@ -1,3 +1,4 @@
+import { Encrypter } from "@src/infra/encrypter/bcrypt";
 import { InMemoryUserRepository } from "@tests/repositories/in-memory-user-repository";
 import { CreateAdminUseCase } from "./create-admin";
 import { ShowAdminUseCase } from "./show-admin";
@@ -5,7 +6,11 @@ import { ShowAdminUseCase } from "./show-admin";
 describe("Show Admin", () => {
   test("should be able return an admin on successs", async () => {
     const inMemoryUserRepository = new InMemoryUserRepository();
-    const createAdminUseCase = new CreateAdminUseCase(inMemoryUserRepository);
+    const encrypter = new Encrypter();
+    const createAdminUseCase = new CreateAdminUseCase(
+      inMemoryUserRepository,
+      encrypter
+    );
     const showAdminsUseCase = new ShowAdminUseCase(inMemoryUserRepository);
 
     const { user } = await createAdminUseCase.execute({

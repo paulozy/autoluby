@@ -1,3 +1,4 @@
+import { Encrypter } from "@src/infra/encrypter/bcrypt";
 import { InMemoryUserRepository } from "@tests/repositories/in-memory-user-repository";
 import { CreateAdminUseCase } from "./create-admin";
 import { DeleteAdminUseCase } from "./delete-admin";
@@ -5,7 +6,11 @@ import { DeleteAdminUseCase } from "./delete-admin";
 describe("Delete Admin", () => {
   test("should be able to delete an admin on success", async () => {
     const inMemoryUserRepository = new InMemoryUserRepository();
-    const createAdminUseCase = new CreateAdminUseCase(inMemoryUserRepository);
+    const encrypter = new Encrypter();
+    const createAdminUseCase = new CreateAdminUseCase(
+      inMemoryUserRepository,
+      encrypter
+    );
     const deleteAdminUseCase = new DeleteAdminUseCase(inMemoryUserRepository);
 
     const { user } = await createAdminUseCase.execute({

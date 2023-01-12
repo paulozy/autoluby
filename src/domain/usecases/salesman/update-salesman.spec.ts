@@ -1,3 +1,4 @@
+import { Encrypter } from "@src/infra/encrypter/bcrypt";
 import { InMemoryUserRepository } from "@tests/repositories/in-memory-user-repository";
 import { CreateSalesmanUseCase } from "./create-salesman";
 import { UpdateSalesmanUseCase } from "./update-salesman";
@@ -5,7 +6,11 @@ import { UpdateSalesmanUseCase } from "./update-salesman";
 describe("Update salesman", () => {
   test("should be able update a salesman on succes", async () => {
     const userRepository = new InMemoryUserRepository();
-    const createSalesmanUseCase = new CreateSalesmanUseCase(userRepository);
+    const encrypter = new Encrypter();
+    const createSalesmanUseCase = new CreateSalesmanUseCase(
+      userRepository,
+      encrypter
+    );
     const updateSalesmanUseCase = new UpdateSalesmanUseCase(userRepository);
 
     const { user: salesman } = await createSalesmanUseCase.execute({
@@ -29,7 +34,11 @@ describe("Update salesman", () => {
 
   test("should not be able update a salesman with an not exiting user", async () => {
     const userRepository = new InMemoryUserRepository();
-    const createSalesmanUseCase = new CreateSalesmanUseCase(userRepository);
+    const encrypter = new Encrypter();
+    const createSalesmanUseCase = new CreateSalesmanUseCase(
+      userRepository,
+      encrypter
+    );
     const updateSalesmanUseCase = new UpdateSalesmanUseCase(userRepository);
 
     const { user: salesman } = await createSalesmanUseCase.execute({

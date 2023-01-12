@@ -1,3 +1,4 @@
+import { Encrypter } from "@src/infra/encrypter/bcrypt";
 import { InMemoryUserRepository } from "@tests/repositories/in-memory-user-repository";
 import { CreateSalesmanUseCase } from "./create-salesman";
 import { DeleteSalesmanUseCase } from "./delete-salesman";
@@ -5,7 +6,11 @@ import { DeleteSalesmanUseCase } from "./delete-salesman";
 describe("Delete Salesman", () => {
   test("should be able delete a salesman on success", async () => {
     const userRepository = new InMemoryUserRepository();
-    const createSalesmanUseCase = new CreateSalesmanUseCase(userRepository);
+    const encrypter = new Encrypter();
+    const createSalesmanUseCase = new CreateSalesmanUseCase(
+      userRepository,
+      encrypter
+    );
     const deleteSalesmanUseCase = new DeleteSalesmanUseCase(userRepository);
 
     const { user: salesman } = await createSalesmanUseCase.execute({

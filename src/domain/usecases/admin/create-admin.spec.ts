@@ -1,10 +1,15 @@
+import { Encrypter } from "@infra/encrypter/bcrypt";
 import { InMemoryUserRepository } from "@tests/repositories/in-memory-user-repository";
 import { CreateAdminUseCase } from "./create-admin";
 
 describe("Create Admin", () => {
   test("Should be able to create a new user admin", async () => {
     const userRepository = new InMemoryUserRepository();
-    const createAdminUseCase = new CreateAdminUseCase(userRepository);
+    const encrypter = new Encrypter();
+    const createAdminUseCase = new CreateAdminUseCase(
+      userRepository,
+      encrypter
+    );
 
     const { user } = await createAdminUseCase.execute({
       cpf: "12345678910",
@@ -21,7 +26,11 @@ describe("Create Admin", () => {
 
   test("Should not be able to create a new user admin with an email already in use", async () => {
     const userRepository = new InMemoryUserRepository();
-    const createAdminUseCase = new CreateAdminUseCase(userRepository);
+    const encrypter = new Encrypter();
+    const createAdminUseCase = new CreateAdminUseCase(
+      userRepository,
+      encrypter
+    );
 
     await createAdminUseCase.execute({
       cpf: "12345678910",
@@ -46,7 +55,11 @@ describe("Create Admin", () => {
 
   test("Should not be able to create a new user admin with an cpf already in use", async () => {
     const userRepository = new InMemoryUserRepository();
-    const createAdminUseCase = new CreateAdminUseCase(userRepository);
+    const encrypter = new Encrypter();
+    const createAdminUseCase = new CreateAdminUseCase(
+      userRepository,
+      encrypter
+    );
 
     await createAdminUseCase.execute({
       cpf: "12345678910",
@@ -65,5 +78,27 @@ describe("Create Admin", () => {
         bio: "I'm a admin",
       });
     }).rejects.toThrowError("User already exists");
+  });
+
+  test("Should be able to create a new user admin with a encrypted password", async () => {
+    const userRepository = new InMemoryUserRepository();
+    const encrypter = new Encrypter();
+    const createAdminUseCase = new CreateAdminUseCase(
+      userRepository,
+      encrypter
+    );
+
+    const encrypterSpy = jest.spyOn(encrypter, "encrypt");
+
+    const { user } = await createAdminUseCase.execute({
+      cpf: "12345678910",
+      name: "John Doe",
+      email: "john_doe.admin@email.com",
+      password: "123456",
+      bio: "I'm a admin",
+    });
+
+    expect(encrypterSpy).toHaveBeenCalledWith("123456");
+    expect(user.password).not.toEqual("123456");
   });
 });

@@ -1,10 +1,15 @@
+import { Encrypter } from "@src/infra/encrypter/bcrypt";
 import { InMemoryUserRepository } from "@tests/repositories/in-memory-user-repository";
 import { CreateSalesmanUseCase } from "./create-salesman";
 
 describe("Create Salesman", () => {
   test("should be able create a new salesman", async () => {
     const userRepository = new InMemoryUserRepository();
-    const createSalesanUseCase = new CreateSalesmanUseCase(userRepository);
+    const encrypter = new Encrypter();
+    const createSalesanUseCase = new CreateSalesmanUseCase(
+      userRepository,
+      encrypter
+    );
 
     const { user } = await createSalesanUseCase.execute({
       cpf: "12345678910",
@@ -22,7 +27,11 @@ describe("Create Salesman", () => {
 
   test("should not be able create a new salesman with an existing email", async () => {
     const userRepository = new InMemoryUserRepository();
-    const createSalesanUseCase = new CreateSalesmanUseCase(userRepository);
+    const encrypter = new Encrypter();
+    const createSalesanUseCase = new CreateSalesmanUseCase(
+      userRepository,
+      encrypter
+    );
 
     await createSalesanUseCase.execute({
       cpf: "12345678910",
@@ -45,7 +54,11 @@ describe("Create Salesman", () => {
 
   test("should not be able create a new salesman with an existing cpf", async () => {
     const userRepository = new InMemoryUserRepository();
-    const createSalesanUseCase = new CreateSalesmanUseCase(userRepository);
+    const encrypter = new Encrypter();
+    const createSalesanUseCase = new CreateSalesmanUseCase(
+      userRepository,
+      encrypter
+    );
 
     await createSalesanUseCase.execute({
       cpf: "12345678910",

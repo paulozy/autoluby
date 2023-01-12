@@ -1,3 +1,4 @@
+import { Encrypter } from "@src/infra/encrypter/bcrypt";
 import { InMemoryUserRepository } from "@tests/repositories/in-memory-user-repository";
 import { CreateAdminUseCase } from "./create-admin";
 import { ListAdminsUseCase } from "./list-admins";
@@ -5,7 +6,11 @@ import { ListAdminsUseCase } from "./list-admins";
 describe("List Admins", () => {
   test("should be able to list all admin users on success", async () => {
     const inMemoryUserRepository = new InMemoryUserRepository();
-    const createAdminUseCase = new CreateAdminUseCase(inMemoryUserRepository);
+    const encrypter = new Encrypter();
+    const createAdminUseCase = new CreateAdminUseCase(
+      inMemoryUserRepository,
+      encrypter
+    );
     const listAdminsUseCase = new ListAdminsUseCase(inMemoryUserRepository);
 
     await createAdminUseCase.execute({
@@ -31,7 +36,11 @@ describe("List Admins", () => {
 
   test("should be able to list all admin users ordered by created date asc", async () => {
     const inMemoryUserRepository = new InMemoryUserRepository();
-    const createAdminUseCase = new CreateAdminUseCase(inMemoryUserRepository);
+    const encrypter = new Encrypter();
+    const createAdminUseCase = new CreateAdminUseCase(
+      inMemoryUserRepository,
+      encrypter
+    );
     const listAdminsUseCase = new ListAdminsUseCase(inMemoryUserRepository);
 
     await createAdminUseCase.execute({
@@ -59,7 +68,11 @@ describe("List Admins", () => {
 
   test("should be able to list all admin users paginated", async () => {
     const inMemoryUserRepository = new InMemoryUserRepository();
-    const createAdminUseCase = new CreateAdminUseCase(inMemoryUserRepository);
+    const encrypter = new Encrypter();
+    const createAdminUseCase = new CreateAdminUseCase(
+      inMemoryUserRepository,
+      encrypter
+    );
     const listAdminsUseCase = new ListAdminsUseCase(inMemoryUserRepository);
 
     await createAdminUseCase.execute({
@@ -88,7 +101,11 @@ describe("List Admins", () => {
 
   test("should be able to list all admin users paginated with key", async () => {
     const inMemoryUserRepository = new InMemoryUserRepository();
-    const createAdminUseCase = new CreateAdminUseCase(inMemoryUserRepository);
+    const encrypter = new Encrypter();
+    const createAdminUseCase = new CreateAdminUseCase(
+      inMemoryUserRepository,
+      encrypter
+    );
     const listAdminsUseCase = new ListAdminsUseCase(inMemoryUserRepository);
 
     await createAdminUseCase.execute({
