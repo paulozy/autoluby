@@ -16,7 +16,7 @@ describe("Update Admin", () => {
       bio: "I'm a admin",
     });
 
-    const { admin: updatedAdmin } = await updateAdminUseCase.execute({
+    const { user: updatedAdmin } = await updateAdminUseCase.execute({
       id: user.id,
       bio: "I'm the master admin",
     });

@@ -13,6 +13,16 @@ export interface ICreateUserResponse {
   user: Admin | Salesman;
 }
 
+export interface IUpdateUserRequest {
+  id: string;
+  name?: string;
+  bio?: string;
+}
+
+export interface IUpdateUserResponse {
+  user: Admin | Salesman;
+}
+
 export interface IDeleteUserRequest {
   id: string;
 }
