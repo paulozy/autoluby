@@ -50,8 +50,6 @@ describe("Aquire vehicle", () => {
       aquiredIn: new Date("2020-01-01"),
     });
 
-    console.log(vehicle);
-
     expect(vehicle).toHaveProperty("id");
     expect(vehicle.aquiredIn).toBeInstanceOf(Date);
     expect(vehicle.aquiredIn).toEqual(new Date("2020-01-01"));
