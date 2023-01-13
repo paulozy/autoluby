@@ -1,4 +1,5 @@
 import { Replace } from "@utils/Replace";
+import { randomUUID } from "crypto";
 
 interface IVehicleProps {
   brand: string;
@@ -23,7 +24,7 @@ export class Vehicle {
     >,
     id?: string
   ) {
-    this._id = id || "";
+    this._id = id || randomUUID();
     this.props = {
       ...props,
       aquiredIn: props.aquiredIn || new Date(),
