@@ -1,5 +1,6 @@
 import { permissions } from "@utils/Permissions";
 import { Replace } from "@utils/Replace";
+import { randomUUID } from "crypto";
 import { IUserBaseProps, UserBase } from "./User";
 
 export class Admin extends UserBase {
@@ -10,7 +11,9 @@ export class Admin extends UserBase {
     >,
     id?: string
   ) {
-    super(props, id);
+    super();
+
+    this._id = id ?? randomUUID();
 
     this.props = {
       ...props,

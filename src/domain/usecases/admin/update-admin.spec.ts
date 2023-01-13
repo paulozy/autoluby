@@ -1,27 +1,38 @@
 import { Encrypter } from "@src/infra/encrypter/bcrypt";
+import { makeAdmin } from "@tests/factories/admin-factory";
 import { InMemoryUserRepository } from "@tests/repositories/in-memory-user-repository";
 import { CreateAdminUseCase } from "./create-admin";
 import { UpdateAdminUseCase } from "./update-admin";
 
+interface SutTypes {
+  sut: UpdateAdminUseCase;
+  createAdminUseCase: CreateAdminUseCase;
+  inMemoryUserRepository: InMemoryUserRepository;
+}
+
+const makeSut = (): SutTypes => {
+  const inMemoryUserRepository = new InMemoryUserRepository();
+  const encrypter = new Encrypter();
+  const createAdminUseCase = new CreateAdminUseCase(
+    inMemoryUserRepository,
+    encrypter
+  );
+  const sut = new UpdateAdminUseCase(inMemoryUserRepository);
+
+  return {
+    sut,
+    createAdminUseCase,
+    inMemoryUserRepository,
+  };
+};
+
 describe("Update Admin", () => {
   test("should be able to update an admin on success", async () => {
-    const inMemoryUserRepository = new InMemoryUserRepository();
-    const encrypter = new Encrypter();
-    const createAdminUseCase = new CreateAdminUseCase(
-      inMemoryUserRepository,
-      encrypter
-    );
-    const updateAdminUseCase = new UpdateAdminUseCase(inMemoryUserRepository);
+    const { sut, createAdminUseCase } = makeSut();
 
-    const { user } = await createAdminUseCase.execute({
-      cpf: "12345678910",
-      name: "John Doe",
-      email: "john_doe.admin@email.com",
-      password: "121334",
-      bio: "I'm a admin",
-    });
+    const { user } = await createAdminUseCase.execute(makeAdmin());
 
-    const { user: updatedAdmin } = await updateAdminUseCase.execute({
+    const { user: updatedAdmin } = await sut.execute({
       id: user.id,
       bio: "I'm the master admin",
     });
@@ -41,11 +52,10 @@ describe("Update Admin", () => {
   });
 
   test("should not be able to update an admin if it does not exists", async () => {
-    const inMemoryUserRepository = new InMemoryUserRepository();
-    const updateAdminUseCase = new UpdateAdminUseCase(inMemoryUserRepository);
+    const { sut } = makeSut();
 
     await expect(
-      updateAdminUseCase.execute({
+      sut.execute({
         id: "non-existing-id",
         bio: "I'm the master admin",
       })
