@@ -10,6 +10,7 @@ interface IAquireVehicleRequest {
   chassi: string;
   price: number;
   aquiredIn?: Date;
+  status?: "available" | "sold" | "reserved";
 }
 
 interface IAquireVehicleResponse {
@@ -22,8 +23,19 @@ export class AquireVehicleUseCase {
   async execute(
     request: IAquireVehicleRequest
   ): Promise<IAquireVehicleResponse> {
+    const { brand, chassi, color, km, model, price, year, aquiredIn, status } =
+      request;
+
     const vehicle = new Vehicle({
-      ...request,
+      brand,
+      chassi,
+      color,
+      km,
+      model,
+      price,
+      year,
+      aquiredIn,
+      status,
     });
 
     await this.vehicleRepository.aquireVehicle(vehicle);

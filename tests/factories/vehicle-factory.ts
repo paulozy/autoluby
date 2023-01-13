@@ -1,9 +1,9 @@
-import { Vehicle } from "@src/domain/entities/Vehicle";
+import { IVehicleProps, Vehicle } from "@src/domain/entities/Vehicle";
 
-type Override = Partial<Vehicle>;
+type Override = Partial<IVehicleProps>;
 
 export function makeVehicle(override: Override = {}) {
-  const vehicle = new Vehicle({
+  return new Vehicle({
     brand: "Fiat",
     model: "Uno",
     year: 1998,
@@ -13,6 +13,4 @@ export function makeVehicle(override: Override = {}) {
     price: 10000,
     ...override,
   });
-
-  return vehicle;
 }

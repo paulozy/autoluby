@@ -1,7 +1,7 @@
 import { Replace } from "@utils/Replace";
 import { randomUUID } from "crypto";
 
-interface IVehicleProps {
+export interface IVehicleProps {
   brand: string;
   model: string;
   year: number;
@@ -24,11 +24,11 @@ export class Vehicle {
     >,
     id?: string
   ) {
-    this._id = id || randomUUID();
+    this._id = id ?? randomUUID();
     this.props = {
       ...props,
-      aquiredIn: props.aquiredIn || new Date(),
-      status: props.status || "available",
+      status: props.status ?? "available",
+      aquiredIn: props.aquiredIn ?? new Date(),
     };
   }
 
