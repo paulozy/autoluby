@@ -55,6 +55,25 @@ describe("List Vehicles", () => {
       orderBy: "AQUIRED_ASC",
     });
 
-    expect(vehicles[0]).toEqual(inMemoryVehicleRepository.vehicles[0]);
+    expect(vehicles).toEqual(inMemoryVehicleRepository.vehicles);
+  });
+
+  test("should be able get vehicles ordered by aquired date desc", async () => {
+    const { sut, aquireVehicleUseCase, inMemoryVehicleRepository } = makeSut();
+
+    await aquireVehicleUseCase.execute(makeVehicle());
+    await aquireVehicleUseCase.execute(
+      makeVehicle({
+        aquiredIn: new Date("2020-01-01"),
+      })
+    );
+
+    expect(inMemoryVehicleRepository.vehicles).toHaveLength(2);
+
+    const { vehicles } = await sut.execute({
+      orderBy: "AQUIRED_DESC",
+    });
+
+    expect(vehicles).toEqual(inMemoryVehicleRepository.vehicles.reverse());
   });
 });
