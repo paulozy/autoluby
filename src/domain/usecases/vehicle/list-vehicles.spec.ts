@@ -131,4 +131,20 @@ describe("List Vehicles", () => {
     expect(vehicles).toHaveLength(2);
     expect(vehicles).toEqual(expect.arrayContaining([vehicleOne, vehicleTwo]));
   });
+
+  test("should be able get vehicles per page with key and status", async () => {
+    const { sut, aquireVehicleUseCase } = makeSut();
+
+    const { vehicle } = await aquireVehicleUseCase.execute(makeVehicle());
+    await aquireVehicleUseCase.execute(makeVehicle());
+    await aquireVehicleUseCase.execute(makeVehicle());
+
+    const { vehicles } = await sut.execute({
+      itemPerPage: 2,
+      itemPageKey: vehicle.id,
+      status: "available",
+    });
+
+    expect(vehicles).toHaveLength(2);
+  });
 });
