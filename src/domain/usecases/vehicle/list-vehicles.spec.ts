@@ -147,4 +147,21 @@ describe("List Vehicles", () => {
 
     expect(vehicles).toHaveLength(2);
   });
+
+  test("should be able get vehicles per page with key and status and order by aquired date asc", async () => {
+    const { sut, aquireVehicleUseCase } = makeSut();
+
+    const { vehicle } = await aquireVehicleUseCase.execute(makeVehicle());
+    await aquireVehicleUseCase.execute(makeVehicle());
+    await aquireVehicleUseCase.execute(makeVehicle());
+
+    const { vehicles } = await sut.execute({
+      itemPerPage: 2,
+      itemPageKey: vehicle.id,
+      status: "available",
+      orderBy: "AQUIRED_ASC",
+    });
+
+    expect(vehicles).toHaveLength(2);
+  });
 });
