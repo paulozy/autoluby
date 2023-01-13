@@ -91,4 +91,24 @@ describe("List Vehicles", () => {
     expect(vehicles).toHaveLength(2);
     expect(vehicles[0].status).toEqual("sold");
   });
+
+  test("should be able get vehicles per page", async () => {
+    const { sut, aquireVehicleUseCase } = makeSut();
+
+    const { vehicle: vehicleOne } = await aquireVehicleUseCase.execute(
+      makeVehicle()
+    );
+    const { vehicle: vehicleTwo } = await aquireVehicleUseCase.execute(
+      makeVehicle()
+    );
+    await aquireVehicleUseCase.execute(makeVehicle());
+    await aquireVehicleUseCase.execute(makeVehicle());
+
+    const { vehicles } = await sut.execute({
+      itemPerPage: 2,
+    });
+
+    expect(vehicles).toHaveLength(2);
+    expect(vehicles).toEqual(expect.arrayContaining([vehicleOne, vehicleTwo]));
+  });
 });
