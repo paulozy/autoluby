@@ -1,135 +1,103 @@
-import { Encrypter } from "@src/infra/encrypter/bcrypt";
+import { makeSalesman } from "@tests/factories/salesman-factory";
 import { InMemoryUserRepository } from "@tests/repositories/in-memory-user-repository";
-import { CreateSalesmanUseCase } from "./create-salesman";
 import { ListSalesmansUseCase } from "./list-salesmans";
 
+interface SutTypes {
+  sut: ListSalesmansUseCase;
+  userRepository: InMemoryUserRepository;
+}
+
+const makeSut = (): SutTypes => {
+  const userRepository = new InMemoryUserRepository();
+  const deleteSalesmanUseCase = new ListSalesmansUseCase(userRepository);
+
+  return {
+    sut: deleteSalesmanUseCase,
+    userRepository,
+  };
+};
+
 describe("List Salesmans", () => {
-  const encrypt = new Encrypter();
-
   test("should be able list all salesmans on success", async () => {
-    const inMemoryUserRepository = new InMemoryUserRepository();
-    const createSalesmanUseCase = new CreateSalesmanUseCase(
-      inMemoryUserRepository,
-      encrypt
+    const { sut, userRepository } = makeSut();
+
+    await makeSalesman({}, userRepository);
+
+    await makeSalesman(
+      {
+        cpf: "12345678902",
+        name: "Mary Doe",
+        email: "mary_doe.salesman@email.com",
+        bio: "Mary Doe is a salesman",
+      },
+      userRepository
     );
-    const listSalesmansUseCase = new ListSalesmansUseCase(
-      inMemoryUserRepository
-    );
 
-    await createSalesmanUseCase.execute({
-      cpf: "12345678901",
-      name: "John Doe",
-      email: "john_doe.salesman@email.com",
-      bio: "John Doe is a salesman",
-      password: "123456",
-    });
-
-    await createSalesmanUseCase.execute({
-      cpf: "12345678902",
-      name: "Mary Doe",
-      email: "mary_doe.salesman@email.com",
-      bio: "Mary Doe is a salesman",
-      password: "123456",
-    });
-
-    const { users: salesmans } = await listSalesmansUseCase.execute({});
+    const { users: salesmans } = await sut.execute({});
 
     expect(salesmans).toHaveLength(2);
   });
 
   test("should be able list all salesmans ordered by created date asc", async () => {
-    const inMemoryUserRepository = new InMemoryUserRepository();
-    const createSalesmanUseCase = new CreateSalesmanUseCase(
-      inMemoryUserRepository,
-      encrypt
+    const { sut, userRepository } = makeSut();
+
+    await makeSalesman({}, userRepository);
+
+    await makeSalesman(
+      {
+        cpf: "12345678902",
+        name: "Mary Doe",
+        email: "mary_doe.salesman@email.com",
+        bio: "Mary Doe is a salesman",
+      },
+      userRepository
     );
-    const listSalesmansUseCase = new ListSalesmansUseCase(
-      inMemoryUserRepository
-    );
 
-    await createSalesmanUseCase.execute({
-      cpf: "12345678901",
-      name: "John Doe",
-      email: "john_doe.salesman@email.com",
-      bio: "John Doe is a salesman",
-      password: "123456",
-    });
-
-    await createSalesmanUseCase.execute({
-      cpf: "12345678902",
-      name: "Mary Doe",
-      email: "mary_doe.salesman@email.com",
-      bio: "Mary Doe is a salesman",
-      password: "123456",
-    });
-
-    const { users: salesmans } = await listSalesmansUseCase.execute({
+    const { users: salesmans } = await sut.execute({
       orderBy: "CREATED_ASC",
     });
 
-    expect(salesmans).toEqual(inMemoryUserRepository.users);
+    expect(salesmans).toEqual(userRepository.users);
   });
 
   test("should be able list all salesmans ordered by created date desc", async () => {
-    const inMemoryUserRepository = new InMemoryUserRepository();
-    const createSalesmanUseCase = new CreateSalesmanUseCase(
-      inMemoryUserRepository,
-      encrypt
+    const { sut, userRepository } = makeSut();
+
+    await makeSalesman({}, userRepository);
+
+    await makeSalesman(
+      {
+        cpf: "12345678902",
+        name: "Mary Doe",
+        email: "mary_doe.salesman@email.com",
+        bio: "Mary Doe is a salesman",
+      },
+      userRepository
     );
-    const listSalesmansUseCase = new ListSalesmansUseCase(
-      inMemoryUserRepository
-    );
 
-    await createSalesmanUseCase.execute({
-      cpf: "12345678901",
-      name: "John Doe",
-      email: "john_doe.salesman@email.com",
-      bio: "John Doe is a salesman",
-      password: "123456",
-    });
-
-    await createSalesmanUseCase.execute({
-      cpf: "12345678902",
-      name: "Mary Doe",
-      email: "mary_doe.salesman@email.com",
-      bio: "Mary Doe is a salesman",
-      password: "123456",
-    });
-
-    const { users: salesmans } = await listSalesmansUseCase.execute({
+    const { users: salesmans } = await sut.execute({
       orderBy: "CREATED_DESC",
     });
 
-    expect(salesmans).toEqual(inMemoryUserRepository.users.reverse());
+    expect(salesmans).toEqual(userRepository.users.reverse());
   });
 
   test("should be able list all salesmans paginated", async () => {
-    const inMemoryUserRepository = new InMemoryUserRepository();
-    const createSalesmanUseCase = new CreateSalesmanUseCase(
-      inMemoryUserRepository,
-      encrypt
+    const { sut, userRepository } = makeSut();
+
+    await makeSalesman({}, userRepository);
+
+    await makeSalesman(
+      {
+        cpf: "12345678902",
+        name: "Mary Doe",
+        email: "mary_doe.salesman@email.com",
+        bio: "Mary Doe is a salesman",
+      },
+      userRepository
     );
-    const listSalesmansUseCase = new ListSalesmansUseCase(
-      inMemoryUserRepository
-    );
 
-    await createSalesmanUseCase.execute({
-      cpf: "12345678901",
-      name: "John Doe",
-      email: "john_doe.salesman@email.com",
-      bio: "John Doe is a salesman",
-      password: "123456",
-    });
-
-    await createSalesmanUseCase.execute({
-      cpf: "12345678902",
-      name: "Mary Doe",
-      email: "mary_doe.salesman@email.com",
-      bio: "Mary Doe is a salesman",
-      password: "123456",
-    });
-
-    const { users: salesmans } = await listSalesmansUseCase.execute({
+    const { users: salesmans } = await sut.execute({
       itemPerPage: 1,
     });
 
@@ -138,40 +106,31 @@ describe("List Salesmans", () => {
   });
 
   test("should be able to list all admin users paginated with key", async () => {
-    const inMemoryUserRepository = new InMemoryUserRepository();
-    const createSalesmanUseCase = new CreateSalesmanUseCase(
-      inMemoryUserRepository,
-      encrypt
+    const { sut, userRepository } = makeSut();
+
+    await makeSalesman({}, userRepository);
+
+    await makeSalesman(
+      {
+        cpf: "12345678902",
+        name: "Mary Doe",
+        email: "mary_doe.salesman@email.com",
+        bio: "Mary Doe is a salesman",
+      },
+      userRepository
     );
-    const listSalesmansUseCase = new ListSalesmansUseCase(
-      inMemoryUserRepository
+
+    const nathan = await makeSalesman(
+      {
+        cpf: "12345678912",
+        name: "Nathan Doe",
+        email: "nathan_doe.admin@email.com",
+        bio: "I'm a nathan admin",
+      },
+      userRepository
     );
 
-    await createSalesmanUseCase.execute({
-      cpf: "12345678901",
-      name: "John Doe",
-      email: "john_doe.salesman@email.com",
-      bio: "John Doe is a salesman",
-      password: "123456",
-    });
-
-    await createSalesmanUseCase.execute({
-      cpf: "12345678902",
-      name: "Mary Doe",
-      email: "mary_doe.salesman@email.com",
-      bio: "Mary Doe is a salesman",
-      password: "123456",
-    });
-
-    const { user: nathan } = await createSalesmanUseCase.execute({
-      cpf: "12345678912",
-      name: "Nathan Doe",
-      email: "nathan_doe.admin@email.com",
-      bio: "I'm a nathan admin",
-      password: "121334",
-    });
-
-    const { users: salesmans } = await listSalesmansUseCase.execute({
+    const { users: salesmans } = await sut.execute({
       itemPerPage: 2,
       itemPageKey: nathan.id,
     });
