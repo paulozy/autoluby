@@ -49,4 +49,16 @@ export class InMemoryVehicleRepository implements IVehicleRepository {
 
     return vehicles;
   }
+
+  async findById(id: string): Promise<Vehicle> {
+    const vehicle = this.vehicles.find((vehicle) => vehicle.id === id);
+    return vehicle;
+  }
+
+  async update(vehicle: Vehicle): Promise<void> {
+    throw new Error("Method not implemented.");
+  }
+  async delete(id: string): Promise<void> {
+    throw new Error("Method not implemented.");
+  }
 }

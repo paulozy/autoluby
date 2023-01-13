@@ -10,4 +10,7 @@ export interface IFindAllParams {
 export interface IVehicleRepository {
   aquireVehicle(vehicle: Vehicle): Promise<void>;
   listAll(params: IFindAllParams): Promise<Vehicle[]>;
+  findById(id: string): Promise<Vehicle | undefined>;
+  update(vehicle: Vehicle): Promise<void>;
+  delete(id: string): Promise<void>;
 }
