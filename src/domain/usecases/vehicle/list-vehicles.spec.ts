@@ -9,7 +9,7 @@ interface SutTypes {
   sut: ListVehicleUseCase;
 }
 
-const makeSut = () => {
+const makeSut = (): SutTypes => {
   const inMemoryVehicleRepository = new InMemoryVehicleRepository();
   const listVehicleUseCase = new ListVehicleUseCase(inMemoryVehicleRepository);
   const aquireVehicleUseCase = new AquireVehicleUseCase(
@@ -37,5 +37,24 @@ describe("List Vehicles", () => {
     const { vehicles } = await sut.execute({});
 
     expect(vehicles).toHaveLength(2);
+  });
+
+  test("should be able get vehicles ordered by aquired date asc", async () => {
+    const { sut, aquireVehicleUseCase, inMemoryVehicleRepository } = makeSut();
+
+    await aquireVehicleUseCase.execute(makeVehicle());
+    await aquireVehicleUseCase.execute(
+      makeVehicle({
+        aquiredIn: new Date("2020-01-01"),
+      })
+    );
+
+    expect(inMemoryVehicleRepository.vehicles).toHaveLength(2);
+
+    const { vehicles } = await sut.execute({
+      orderBy: "AQUIRED_ASC",
+    });
+
+    expect(vehicles[0]).toEqual(inMemoryVehicleRepository.vehicles[0]);
   });
 });
