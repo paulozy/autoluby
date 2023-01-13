@@ -1,6 +1,3 @@
-import { Replace } from "@src/utils/Replace";
-import { randomUUID } from "crypto";
-
 export interface IUserBaseProps {
   name: string;
   cpf: string;
@@ -12,18 +9,8 @@ export interface IUserBaseProps {
 }
 
 export class UserBase {
-  private _id: string;
+  public _id: string;
   public props: IUserBaseProps;
-
-  constructor(
-    props: Replace<
-      IUserBaseProps,
-      { createdAt?: Date; permissions?: string[] }
-    >,
-    id?: string
-  ) {
-    this._id = id ?? randomUUID();
-  }
 
   public get id(): string {
     return this._id;
@@ -59,6 +46,10 @@ export class UserBase {
 
   public set bio(bio: string) {
     this.props.bio = bio;
+  }
+
+  public get password(): string {
+    return this.props.password;
   }
 
   public set password(password: string) {

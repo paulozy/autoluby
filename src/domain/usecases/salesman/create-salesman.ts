@@ -13,7 +13,7 @@ export class CreateSalesmanUseCase {
   ) {}
 
   async execute(request: ICreateUserRequest): Promise<ICreateUserResponse> {
-    const { cpf, name, email, bio } = request;
+    const { cpf, name, email, bio, createdAt } = request;
 
     const emailAlreadyUse = await this.userRepository.findByEmail(email);
     const userAlreadyExists = await this.userRepository.findByCpf(cpf);
@@ -30,6 +30,7 @@ export class CreateSalesmanUseCase {
       email,
       password,
       bio,
+      createdAt,
     });
 
     await this.userRepository.save(salesman);

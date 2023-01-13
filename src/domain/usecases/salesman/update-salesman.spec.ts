@@ -1,27 +1,38 @@
+import { Encrypter } from "@src/infra/encrypter/bcrypt";
 import { makeSalesman } from "@tests/factories/salesman-factory";
 import { InMemoryUserRepository } from "@tests/repositories/in-memory-user-repository";
+import { CreateSalesmanUseCase } from "./create-salesman";
 import { UpdateSalesmanUseCase } from "./update-salesman";
 
 interface SutTypes {
   sut: UpdateSalesmanUseCase;
   userRepository: InMemoryUserRepository;
+  createSalesmanUseCase: CreateSalesmanUseCase;
 }
 
 const makeSut = (): SutTypes => {
   const userRepository = new InMemoryUserRepository();
+  const encrypter = new Encrypter();
+  const createSalesmanUseCase = new CreateSalesmanUseCase(
+    userRepository,
+    encrypter
+  );
   const deleteSalesmanUseCase = new UpdateSalesmanUseCase(userRepository);
 
   return {
     sut: deleteSalesmanUseCase,
     userRepository,
+    createSalesmanUseCase,
   };
 };
 
 describe("Update salesman", () => {
   test("should be able update a salesman on succes", async () => {
-    const { sut, userRepository } = makeSut();
+    const { sut, createSalesmanUseCase } = makeSut();
 
-    const salesman = await makeSalesman({}, userRepository);
+    const { user: salesman } = await createSalesmanUseCase.execute(
+      makeSalesman()
+    );
 
     const { user: updatedSalesman } = await sut.execute({
       id: salesman.id,

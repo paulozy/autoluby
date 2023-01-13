@@ -2,11 +2,9 @@ import { compare, hash } from "bcrypt";
 import { IEncrypter } from "../IEncrypter";
 
 export class Encrypter implements IEncrypter {
-  salt: number;
+  salt: number = 12;
 
-  constructor(salt: number = 12) {
-    this.salt = salt;
-  }
+  constructor() {}
 
   public async encrypt(value: string): Promise<string> {
     return hash(value, this.salt);

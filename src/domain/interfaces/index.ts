@@ -7,6 +7,7 @@ export interface ICreateUserRequest {
   email: string;
   password: string;
   bio: string;
+  createdAt?: Date;
 }
 
 export interface ICreateUserResponse {
