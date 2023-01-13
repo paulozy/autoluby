@@ -32,4 +32,12 @@ describe("Show vehicle", () => {
 
     expect(vehicle).toEqual(createdVehicle);
   });
+
+  test("should be able throw if vehicle not found", async () => {
+    const { sut } = makeSut();
+
+    await expect(sut.execute({ id: "invalid_id" })).rejects.toThrow(
+      "Vehicle not found"
+    );
+  });
 });
