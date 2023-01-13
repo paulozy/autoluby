@@ -76,4 +76,19 @@ describe("List Vehicles", () => {
 
     expect(vehicles).toEqual(inMemoryVehicleRepository.vehicles.reverse());
   });
+
+  test("should be able get vehicles by status", async () => {
+    const { sut, aquireVehicleUseCase } = makeSut();
+
+    await aquireVehicleUseCase.execute(makeVehicle());
+    await aquireVehicleUseCase.execute(makeVehicle({ status: "sold" }));
+    await aquireVehicleUseCase.execute(makeVehicle({ status: "sold" }));
+
+    const { vehicles } = await sut.execute({
+      status: "sold",
+    });
+
+    expect(vehicles).toHaveLength(2);
+    expect(vehicles[0].status).toEqual("sold");
+  });
 });
