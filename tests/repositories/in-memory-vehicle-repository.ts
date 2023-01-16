@@ -56,6 +56,10 @@ export class InMemoryVehicleRepository implements IVehicleRepository {
   }
 
   async delete(id: string): Promise<void> {
-    throw new Error("Method not implemented.");
+    const vehicleIndex = this.vehicles.findIndex(
+      (vehicle) => vehicle.id === id
+    );
+
+    this.vehicles.splice(vehicleIndex, 1);
   }
 }
