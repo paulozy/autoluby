@@ -45,4 +45,15 @@ describe("Sold vehicle", () => {
     expect(transaction.vehicleId).toBe(vehicle.id);
     expect(vehicle.status).toBe("sold");
   });
+
+  test("should not be able to sell a vehicle that does not exist", async () => {
+    const { sut } = makeSut();
+
+    await expect(
+      sut.execute({
+        vehicleId: "any_vehicle_id",
+        salesmanId: "any_salesman_id",
+      })
+    ).rejects.toThrow("Vehicle not found");
+  });
 });
