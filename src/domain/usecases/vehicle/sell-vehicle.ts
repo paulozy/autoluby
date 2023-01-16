@@ -5,6 +5,7 @@ import { IVehicleRepository } from "@src/domain/repositories/vehicle-repository"
 interface ISellVehicleRequest {
   vehicleId: string;
   salesmanId: string;
+  createdAt?: Date;
 }
 
 interface ISellVehicleResponse {
@@ -20,7 +21,7 @@ export class SellVehicleUseCase {
   ) {}
 
   async execute(request: ISellVehicleRequest): Promise<ISellVehicleResponse> {
-    const { salesmanId, vehicleId } = request;
+    const { salesmanId, vehicleId, createdAt } = request;
 
     const vehicle = await this.vehicleRepository.findById(request.vehicleId);
 
@@ -36,6 +37,7 @@ export class SellVehicleUseCase {
       type: this.type,
       vehicleId,
       salesmanId,
+      createdAt,
     });
 
     await this.transactionRepository.save(transaction);
