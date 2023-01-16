@@ -33,4 +33,12 @@ describe("Delete vehicle", () => {
 
     expect(vehicleRepository.vehicles).toHaveLength(0);
   });
+
+  test("should not be able delete a vehicle that does not exist", async () => {
+    const { sut } = makeSut();
+
+    await expect(sut.execute("any_vehicle_id")).rejects.toThrow(
+      "Vehicle not found"
+    );
+  });
 });
