@@ -56,4 +56,21 @@ describe("Sold vehicle", () => {
       })
     ).rejects.toThrow("Vehicle not found");
   });
+
+  test("should not be able to sell a vehicle that is not available", async () => {
+    const { sut, aquireVehicleUseCase } = makeSut();
+
+    const { vehicle } = await aquireVehicleUseCase.execute(
+      makeVehicle({
+        status: "sold",
+      })
+    );
+
+    await expect(
+      sut.execute({
+        vehicleId: vehicle.id,
+        salesmanId: "any_salesman_id",
+      })
+    ).rejects.toThrow("Vehicle is not available to sale");
+  });
 });
