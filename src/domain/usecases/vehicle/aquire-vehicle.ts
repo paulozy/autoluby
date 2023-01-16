@@ -38,7 +38,7 @@ export class AquireVehicleUseCase {
       status,
     });
 
-    await this.vehicleRepository.aquireVehicle(vehicle);
+    await this.vehicleRepository.save(vehicle);
 
     return { vehicle };
   }

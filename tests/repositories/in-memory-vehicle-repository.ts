@@ -7,7 +7,7 @@ import {
 export class InMemoryVehicleRepository implements IVehicleRepository {
   public vehicles: Vehicle[] = [];
 
-  async aquireVehicle(vehicle: Vehicle): Promise<void> {
+  async save(vehicle: Vehicle): Promise<void> {
     this.vehicles.push(vehicle);
   }
 
@@ -55,9 +55,6 @@ export class InMemoryVehicleRepository implements IVehicleRepository {
     return vehicle;
   }
 
-  async update(vehicle: Vehicle): Promise<void> {
-    throw new Error("Method not implemented.");
-  }
   async delete(id: string): Promise<void> {
     throw new Error("Method not implemented.");
   }
