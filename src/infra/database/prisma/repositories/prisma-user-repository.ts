@@ -27,9 +27,31 @@ export class PrismaUserRepository implements IUserRepository {
   }
 
   async findAll(params: IFindAllParams): Promise<UserBase[]> {
-    const { orderBy, itemPerPage, itemPageKey } = params;
+    const orderBy = params.orderBy === "CREATED_ASC" ? "asc" : "desc";
 
-    const users = await this.prisma.user.findMany({});
+    let users = [];
+
+    if (!params.orderBy && !params.itemPerPage && !params.itemPageKey) {
+      users = await this.prisma.user.findMany({});
+    }
+
+    if (params.orderBy) {
+      users = await this.prisma.user.findMany({
+        orderBy: {
+          createdAt: orderBy,
+        },
+      });
+    }
+
+    if (params.itemPerPage && params.itemPageKey) {
+      users = await this.prisma.user.findMany({
+        take: params.itemPerPage,
+        skip: params.itemPerPage,
+        cursor: {
+          id: params.itemPageKey,
+        },
+      });
+    }
 
     return users.map((user) => {
       return PrismaUserMapper.toDomain(user);
