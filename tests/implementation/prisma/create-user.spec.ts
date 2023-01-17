@@ -10,7 +10,7 @@ interface SutTypes {
 }
 
 const makeSut = (): SutTypes => {
-  const userRepository = new PrismaUserRepository(prisma);
+  const userRepository = new PrismaUserRepository();
   const encrypter = new Encrypter();
   const sut = new CreateAdminUseCase(userRepository, encrypter);
 
