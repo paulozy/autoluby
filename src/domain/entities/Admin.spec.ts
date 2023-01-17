@@ -13,6 +13,8 @@ describe("Administrator", () => {
 
     expect(admin).toBeTruthy();
     expect(admin).toHaveProperty("id");
-    expect(admin.props.permissions).toEqual(permissions.administrator);
+    expect(admin.props.permissions).toEqual(
+      permissions.administrator.join(",")
+    );
   });
 });

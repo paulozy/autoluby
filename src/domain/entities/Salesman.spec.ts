@@ -13,6 +13,6 @@ describe("Salesman", () => {
 
     expect(salesman).toBeTruthy();
     expect(salesman).toHaveProperty("id");
-    expect(salesman.props.permissions).toEqual(permissions.salesman);
+    expect(salesman.props.permissions).toEqual(permissions.salesman.join(","));
   });
 });

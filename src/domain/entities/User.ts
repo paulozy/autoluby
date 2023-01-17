@@ -4,7 +4,7 @@ export interface IUserBaseProps {
   email: string;
   bio: string;
   password: string;
-  permissions: string[];
+  permissions: string;
   createdAt: Date;
 }
 
@@ -56,11 +56,11 @@ export class UserBase {
     this.props.password = password;
   }
 
-  public get permissions(): string[] {
+  public get permissions(): string {
     return this.props.permissions;
   }
 
-  public set permissions(permissions: string[]) {
+  public set permissions(permissions: string) {
     this.props.permissions = permissions;
   }
 
