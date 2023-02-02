@@ -8,7 +8,7 @@ export interface IUserBaseProps {
   createdAt: Date;
 }
 
-export class UserBase {
+export abstract class UserBase {
   public _id: string;
   public props: IUserBaseProps;
 
